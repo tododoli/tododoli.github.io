@@ -14,7 +14,7 @@ const Home = () => {
     const createList = () => {
         API.createList(title!=='' ? title : 'New list', color).then(
             (r) => {
-                setLink('/list/' + r.name)
+                setLink('/' + r.name)
             }
         )
     }
@@ -23,7 +23,7 @@ const Home = () => {
     return <div className={styles.wrapper}>
         <div className={styles.form}>
             <div className={styles.input}>
-                <input value={title} onChange={(e) => setTitle(e.target.value)}/>
+                <input placeholder={'New List...'} value={title} onChange={(e) => setTitle(e.target.value)}/>
             </div>
             <div className={styles.colorsSection}>
                 <div className={styles.colors}>
