@@ -23,7 +23,7 @@ const Home = () => {
     return <div className={styles.wrapper}>
         <div className={styles.form}>
             <div className={styles.input}>
-                <input autoFocus={true} value={title} onChange={(e) => setTitle(e.target.value)}/>
+                <input value={title} onChange={(e) => setTitle(e.target.value)}/>
             </div>
             <div className={styles.colorsSection}>
                 <div className={styles.colors}>
