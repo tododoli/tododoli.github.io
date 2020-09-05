@@ -1,0 +1,35 @@
+.red {
+    color: #e76f51;
+}
+.green {
+    color: #40916c;
+}
+.blue {
+    color: #0077b6;
+}
+.dark {
+    color: #ff5d8f;
+}
+.default {
+    color: #495057;
+}
+.redB {
+    background-color: #f77f00;
+    border-color: #e76f51;
+}
+.greenB {
+    background-color: #74c69d;
+    border-color: #40916c;
+}
+.blueB {
+    background-color: #90e0ef;
+    border-color: #0077b6;
+}
+.darkB {
+    background-color: #ffc4d6;
+    border-color: #ff5d8f;
+}
+.defaultB {
+    background-color: #adb5bd;
+    border-color: #495057;
+}

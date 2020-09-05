@@ -1,0 +1,96 @@
+.wrapper {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(220deg, rgba(244, 162, 97, 0.6), rgba(231, 111, 81, 0.6), rgba(42, 157, 143, 0.6), rgba(38, 70, 83, 0.6));
+    background-size: 800% 800%;
+    -webkit-animation: AnimationName 40s ease infinite;
+    -moz-animation: AnimationName 40s ease infinite;
+    animation: AnimationName 40s ease infinite;
+}
+
+@-webkit-keyframes AnimationName {
+    0%{background-position:79% 0%}
+    50%{background-position:22% 100%}
+    100%{background-position:79% 0%}
+}
+@-moz-keyframes AnimationName {
+    0%{background-position:79% 0%}
+    50%{background-position:22% 100%}
+    100%{background-position:79% 0%}
+}
+@keyframes AnimationName {
+    0%{background-position:79% 0%}
+    50%{background-position:22% 100%}
+    100%{background-position:79% 0%}
+}
+
+.form {
+    border-radius: 10px;
+    width: 80vw;
+    background-color: white;
+    padding: 1rem;
+    display: grid;
+    grid-gap: 1rem;
+    grid-template-rows: min-content 1fr min-content;
+}
+.colorsSection {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.colors {
+    width: min-content;
+    display: grid;
+    grid-gap: .5rem;
+    grid-template-columns: 1fr 1fr 1fr 1fr
+}
+.color, .colorActive {
+    width: 3rem;
+    height: 3rem;
+}
+.colorActive {
+    border: solid 2px white;
+    box-sizing: border-box;
+}
+.input {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+.input input {
+    font-size: 1.1rem;
+    border: solid 1px #2b2b2b;
+    border-radius: 3px;
+    padding: .3rem;
+    width: 100%;
+}
+
+.buttonSection {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.button {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+    background-color: transparent;
+    border: 1px solid black;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: .5rem;
+    transition-duration: .3s;
+}
+.button:hover {
+    background-color: rgba(0, 0, 0, .03);
+}
+.button:active {
+    background-color: rgba(0, 0, 0, .1);
+    transition-duration: 0s;
+}
