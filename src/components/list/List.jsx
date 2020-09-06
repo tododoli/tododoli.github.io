@@ -72,7 +72,7 @@ const NewCard = (props) => {
         }
     }
 
-    return <div className={styles.inputWrapper}>
+    return <div className={styles.inputWrapper} id={'addCard'}>
         <input id={'input'} placeholder='New task...' className={styles.input} value={cardText}
                   onChange={updateInput} onKeyPress={listenKey}/>
         <div className={styles.addButton+' '+props.color} onClick={onAdd}><i className='fas fa-plus-circle'/></div>
@@ -122,6 +122,7 @@ const List = () => {
         API.addTask(id, text).then(
             (resp) => {
                 resp.name && fetchList(id)
+                document.querySelector('#addCard').scrollIntoView({behavior: "auto"})
             }
         )
     }
