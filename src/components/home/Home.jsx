@@ -18,12 +18,18 @@ const Home = () => {
             }
         )
     }
+    const listenKey = (e) => {
+        if (e.key === 'Enter')  {
+            e.preventDefault()
+            createList()
+        }
+    }
 
     if (link !== '') return <Redirect to={link}/>
     return <div className={styles.wrapper}>
         <div className={styles.form}>
             <div className={styles.input}>
-                <input placeholder={'New List...'} value={title} onChange={(e) => setTitle(e.target.value)}/>
+                <input autoFocus={true} onKeyPress={listenKey} placeholder={'New List...'} value={title} onChange={(e) => setTitle(e.target.value)}/>
             </div>
             <div className={styles.colorsSection}>
                 <div className={styles.colors}>

@@ -72,6 +72,8 @@
     margin-left: .5rem;
     color: #888888;
     font-size: 1rem;
+    cursor: pointer;
+
 }
 
 /* Copy link button */

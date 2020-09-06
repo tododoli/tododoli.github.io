@@ -36,6 +36,13 @@ const Card = (props) => {
         )
     }
 
+    const listenKey = (e) => {
+        if (e.key === 'Enter')  {
+            e.preventDefault()
+            saveTask()
+        }
+    }
+
     const saveTask = () => {
         API.editTask(props.list, props.id, {text: newText, done: props.done}).then(
             (r) => {
@@ -51,9 +58,9 @@ const Card = (props) => {
                 <i className='fas fa-check-circle' onClick={markTask}/>}</div>
             <div
                 className={props.done ? styles.textDone : styles.textActive}>{editMode ?
-                <TextArea className={styles.input} value={newText} minRows={1} maxRows={5} onChange={(e) => {
+                <input className={styles.input} autoFocus={true} value={newText} onChange={(e) => {
                     setNewText(e.target.value)
-                }}/> : props.text}</div>
+                }} onKeyPress={listenKey}/> : props.text}</div>
             <div className={styles.btn + ' ' + props.colorF}><i
                 className={isOptsShown ? 'fas fa-chevron-circle-up' : 'fas fa-chevron-circle-down'}
                 onClick={() => showOpts(!isOptsShown)}/></div>

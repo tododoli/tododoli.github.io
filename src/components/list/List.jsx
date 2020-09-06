@@ -62,10 +62,19 @@ const NewCard = (props) => {
     const onAdd = () => {
         props.addTask(cardText)
         setCardText('')
+        document.querySelector('#input').focus()
+
     }
+    const listenKey = (e) => {
+        if (e.key === 'Enter')  {
+            e.preventDefault()
+            onAdd()
+        }
+    }
+
     return <div className={styles.inputWrapper}>
-        <TextArea minRows={1} maxRows={3} placeholder='New task...' className={styles.input} value={cardText}
-                  onChange={updateInput}/>
+        <input id={'input'} placeholder='New task...' className={styles.input} value={cardText}
+                  onChange={updateInput} onKeyPress={listenKey}/>
         <div className={styles.addButton+' '+props.color} onClick={onAdd}><i className='fas fa-plus-circle'/></div>
     </div>
 }
