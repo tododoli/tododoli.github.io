@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from 'react'
 import styles from './List.module.css'
 import Card from "../card/Card";
-import {useParams} from 'react-router-dom'
+import {NavLink, useParams} from 'react-router-dom'
 import {API} from "../../API/API";
 import TextArea from 'react-textarea-autosize'
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import colors from './../../Colors.module.css'
+import logo from '../../assets/logo.png'
 
 const Header = (props) => {
     let [isCopied, setCopied] = useState(false)
@@ -135,6 +136,11 @@ const List = () => {
     }) : null
 
     return <div className={`${styles.background} ${colorB}`}>
+        <div className={styles.logoArea}>
+            <NavLink to={'/'}>
+                <img className={styles.logo} alt='logo' src={logo}/>
+            </NavLink>
+        </div>
         <Header title={title} listId={id} update={fetchList}/>
         <div className={styles.list}>
             {doneItemsComponents}
