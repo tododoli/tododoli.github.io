@@ -164,6 +164,7 @@
 }
 .addButton:active {
     transform: scale(.9);
+    -webkit-transform:scale(0.9, 0.9);
     transition-duration: 0.2s;
 }
 .pseudoExtender {
