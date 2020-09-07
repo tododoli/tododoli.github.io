@@ -1,13 +1,21 @@
 import React, {useEffect, useState} from 'react'
 import styles from './Card.module.css'
 import {API} from "../../API/API";
-import TextArea from 'react-textarea-autosize'
 
 
 const Options = (props) => {
     return <div className={styles.options}>
-        <div className={styles.icon + ' ' + props.colorF} onClick={props.editMode ? props.saveFun : props.editFun}><i
-            className={!props.editMode ? 'fas fa-pen' : 'fas fa-check'}/> {props.editMode ? 'Save' : 'Edit'}</div>
+        {props.editMode ?
+            <div className={styles.icon + ' ' + props.colorF} onClick={props.saveFun}>
+                <i
+                    className={'fas fa-check'}/> {'Save'}
+            </div>
+            :
+            <div className={styles.icon + ' ' + props.colorF} onClick={props.editFun}>
+                <i
+                    className={'fas fa-pen'}/> {'Edit'}
+            </div>
+        }
         <div className={styles.icon + ' ' + props.colorF} onClick={props.deleteFun}><i className='fas fa-trash'/> Delete
         </div>
     </div>
@@ -58,9 +66,11 @@ const Card = (props) => {
                 <i className='fas fa-check-circle' onClick={markTask}/>}</div>
             <div
                 className={props.done ? styles.textDone : styles.textActive}>{editMode ?
-                <input onKeyPress={listenKey} onBlur={()=>setEditMode(false)} className={styles.input} autoFocus={true} value={newText}
+                <input onKeyPress={listenKey}  className={styles.input}
+                       autoFocus={true} value={newText}
                        onChange={(e) => {
-                           setNewText(e.target.value)}}/> : props.text}</div>
+                           setNewText(e.target.value)
+                       }}/> : props.text}</div>
             <div className={styles.btn + ' ' + props.colorF}><i
                 id={styles.menuBtn}
                 className={isOptsShown ? 'fas fa-ellipsis-h' : 'fas fa-ellipsis-h'}

@@ -3,10 +3,8 @@ import styles from './List.module.css'
 import Card from "../card/Card";
 import {NavLink, useParams} from 'react-router-dom'
 import {API} from "../../API/API";
-import TextArea from 'react-textarea-autosize'
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import colors from './../../Colors.module.css'
-import logo from '../../assets/logo.png'
 
 const Header = (props) => {
     let [isCopied, setCopied] = useState(false)
@@ -92,6 +90,7 @@ const List = () => {
     useEffect(
         ()=>{
             setLink(window.location.href)
+            window.scrollTo({top: 0, behavior: "smooth"})
         }, []
     )
 

@@ -8,7 +8,7 @@
     max-width: 100vw;
     height: fit-content;
     min-height: 100vh;
-    margin: 0;
+    margin: 0 auto;
     transition-duration: 1s;
 }
 
