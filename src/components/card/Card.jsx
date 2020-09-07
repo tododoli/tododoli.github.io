@@ -37,7 +37,7 @@ const Card = (props) => {
     }
 
     const listenKey = (e) => {
-        if (e.key === 'Enter')  {
+        if (e.key === 'Enter') {
             e.preventDefault()
             saveTask()
         }
@@ -58,11 +58,12 @@ const Card = (props) => {
                 <i className='fas fa-check-circle' onClick={markTask}/>}</div>
             <div
                 className={props.done ? styles.textDone : styles.textActive}>{editMode ?
-                <input className={styles.input} autoFocus={true} value={newText} onChange={(e) => {
-                    setNewText(e.target.value)
-                }} onKeyPress={listenKey}/> : props.text}</div>
+                <input onKeyPress={listenKey} onBlur={()=>setEditMode(false)} className={styles.input} autoFocus={true} value={newText}
+                       onChange={(e) => {
+                           setNewText(e.target.value)}}/> : props.text}</div>
             <div className={styles.btn + ' ' + props.colorF}><i
-                className={isOptsShown ? 'fas fa-chevron-circle-up' : 'fas fa-chevron-circle-down'}
+                id={styles.menuBtn}
+                className={isOptsShown ? 'fas fa-ellipsis-h' : 'fas fa-ellipsis-h'}
                 onClick={() => showOpts(!isOptsShown)}/></div>
         </div>
         {isOptsShown && <Options

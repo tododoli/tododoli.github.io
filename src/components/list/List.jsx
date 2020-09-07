@@ -35,7 +35,7 @@ const Header = (props) => {
                     <input autoFocus={true} onSubmit={rename} placeholder={'New title...'} onChange={(e) => {setNewTitle(e.target.value)}}
                            value={newTitle}/>
                            :
-                    <div className={styles.title}>{props.title || ''}</div>
+                    <div className={styles.title}><NavLink className={styles.link} to={'/'}>{'tododoli/'}</NavLink>{<span>{props.title}</span> || ''}</div>
                 }
             </div>
             <div className={styles.titleButton}>
@@ -47,7 +47,7 @@ const Header = (props) => {
         <div className={styles.copySection}>
             <CopyToClipboard text={window.location.href} onCopy={() => setCopied(true)}>
                 <div className={styles.copyLink}>
-                    <i className='fas fa-link'/>{!editMode && <span>{isCopied ? 'Copied!' : 'Copy link'}</span>}
+                    <i className={isCopied ? 'fas fa-check' : 'fas fa-link'}/>
                 </div>
             </CopyToClipboard>
         </div>
@@ -136,16 +136,12 @@ const List = () => {
     }) : null
 
     return <div className={`${styles.background} ${colorB}`}>
-        <div className={styles.logoArea}>
-            <NavLink to={'/'}>
-                <img className={styles.logo} alt='logo' src={logo}/>
-            </NavLink>
-        </div>
         <Header title={title} listId={id} update={fetchList}/>
         <div className={styles.list}>
             {doneItemsComponents}
             {activeItemsComponents}
             <NewCard addTask={addTask} color={colorF}/>
+            <div className={styles.pseudoExtender}/>
         </div>
     </div>
 }

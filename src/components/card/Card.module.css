@@ -13,13 +13,16 @@
     -moz-osx-font-smoothing: grayscale;
     word-break: break-word;
 }
+
 .grid {
     display: grid;
     grid-template-columns: min-content 1fr min-content;
     width: 100%;
     grid-gap: 5px;
 }
+
 .btn {
+    transition-duration: .4s;
     font-size: 1.2rem;
     margin: 0 5px;
     display: flex;
@@ -27,13 +30,26 @@
     justify-content: center;
     cursor: pointer;
 }
+.btn:active {
+    transform: scale(.9);
+    transition-duration: 0.2s;
+}
+
+#menuBtn {
+    transition-duration: .3s;
+}
+
+#menuBtn:active {
+    transition-duration: 0s;
+    transform: rotate(180deg);
+}
 
 .done {
     background-color: white;
     opacity: .7;
 }
 
-.active{
+.active {
     background-color: white;
     color: black;
 }
@@ -51,6 +67,7 @@
     grid-gap: .5rem;
     width: fit-content;
 }
+
 .icon {
     padding: .5rem;
     display: flex;
@@ -66,16 +83,18 @@
 }
 
 .icon:hover {
-    background-color: rgba(0,0,0,.03);
+    background-color: rgba(0, 0, 0, .03);
 }
+
 .icon:active {
-    background-color: rgba(0,0,0,.1);
+    background-color: rgba(0, 0, 0, .1);
     transition-duration: 0s;
 }
 
 .icon i {
     margin-right: 5px;
 }
+
 .input {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',

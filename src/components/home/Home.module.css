@@ -54,7 +54,7 @@
     cursor: pointer;
 }
 .colorActive {
-    border: solid 2px white;
+    border: solid 2px black;
     box-sizing: border-box;
 }
 .input {

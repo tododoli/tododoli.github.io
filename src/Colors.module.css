@@ -14,15 +14,15 @@
     color: #495057;
 }
 .redB {
-    background-color: #f77f00;
+    background-color: rgba(247, 127, 0, 0.6);
     border-color: #e76f51;
 }
 .greenB {
-    background-color: #74c69d;
+    background-color: rgba(116, 198, 157, 0.6);
     border-color: #40916c;
 }
 .blueB {
-    background-color: #90e0ef;
+    background-color: rgba(144, 224, 239, 0.6);
     border-color: #0077b6;
 }
 .darkB {
@@ -30,6 +30,6 @@
     border-color: #ff5d8f;
 }
 .defaultB {
-    background-color: #adb5bd;
+    background-color: rgba(173, 181, 189, 0.6);
     border-color: #495057;
 }
