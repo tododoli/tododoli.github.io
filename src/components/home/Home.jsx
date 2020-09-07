@@ -29,7 +29,7 @@ const Home = () => {
     return <div className={styles.wrapper}>
         <div className={styles.form}>
             <div className={styles.input}>
-                <input autoFocus={true} onKeyPress={listenKey} placeholder={'New List...'} value={title} onChange={(e) => setTitle(e.target.value)}/>
+                <input onKeyPress={listenKey} placeholder={'New List...'} value={title} onChange={(e) => setTitle(e.target.value)}/>
             </div>
             <div className={styles.colorsSection}>
                 <div className={styles.colors}>

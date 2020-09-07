@@ -75,7 +75,7 @@ const NewCard = (props) => {
     }
 
     return <div className={styles.inputWrapper} id={'addCard'}>
-        <TextArea id={'input'} maxRows={5}  placeholder='New task...' className={styles.input} value={cardText}
+        <input id={'input'} placeholder='New task...' className={styles.input} value={cardText}
                   onChange={updateInput} onKeyPress={listenKey}/>
         <div className={styles.addButton+' '+props.color} style={cardText !=='' ? {opacity: 1} : {opacity: .6}} onClick={onAdd}><i className='fas fa-plus-circle'/></div>
     </div>
