@@ -12,7 +12,7 @@ const Header = (props) => {
     let [newTitle, setNewTitle] = useState(props.title)
 
     useEffect(
-        ()=>{
+        () => {
             setNewTitle(props.title)
         }, [props.title]
     )
@@ -30,10 +30,14 @@ const Header = (props) => {
             <div className={styles.headerTitle}>
                 {editMode
                     ?
-                    <input autoFocus={true} onSubmit={rename} placeholder={'New title...'} onChange={(e) => {setNewTitle(e.target.value)}}
+                    <input autoFocus={true} onSubmit={rename} placeholder={'New title...'} onChange={(e) => {
+                        setNewTitle(e.target.value)
+                    }}
                            value={newTitle}/>
-                           :
-                    <div className={styles.title}><NavLink className={styles.link+' '+props.color} to={'/'}>{'ToDoDoLi:'}</NavLink>{<span>{props.title}</span> || ''}</div>
+                    :
+                    <div className={styles.title}><NavLink className={styles.link + ' ' + props.color}
+                                                           to={'/'}>{'ToDoDoLi:'}</NavLink>{
+                        <span>{props.title}</span> || ''}</div>
                 }
             </div>
             <div className={styles.titleButton}>
@@ -66,7 +70,7 @@ const NewCard = (props) => {
 
     }
     const listenKey = (e) => {
-        if (e.key === 'Enter')  {
+        if (e.key === 'Enter') {
             e.preventDefault()
             onAdd()
         }
@@ -74,8 +78,9 @@ const NewCard = (props) => {
 
     return <div className={styles.inputWrapper} id={'addCard'}>
         <input id={'input'} placeholder='New task...' className={styles.input} value={cardText}
-                  onChange={updateInput} onKeyPress={listenKey}/>
-        <div className={styles.addButton+' '+props.color} style={cardText !=='' ? {opacity: 1} : {opacity: .6}} onClick={onAdd}><i className='fas fa-plus-circle'/></div>
+               onChange={updateInput} onKeyPress={listenKey}/>
+        <div className={styles.addButton + ' ' + props.color} style={cardText !== '' ? {opacity: 1} : {opacity: .6}}
+             onClick={onAdd}><i className='fas fa-plus-circle'/></div>
     </div>
 }
 
@@ -88,9 +93,10 @@ const List = () => {
     let [link, setLink] = useState('')
 
     useEffect(
-        ()=>{
+        () => {
             setLink(window.location.href)
             window.scrollTo({top: 0, behavior: "smooth"})
+            updateHistory()
         }, []
     )
 
@@ -99,8 +105,24 @@ const List = () => {
             fetchList(id)
         }, [id]
     )
+
+    const updateHistory = () => {
+        let history = JSON.parse(localStorage.getItem('history'))
+        if (history === null)
+            history = []
+        if (history.includes(id)) {
+            let index = history.indexOf(id);
+            history.splice(index, 1);
+        }
+        history.unshift(id) > 10 && history.pop()
+        localStorage.setItem('history', JSON.stringify(history))
+
+
+    }
+
     const fetchList = (id) => {
         API.fetchList(id).then(r => {
+            if (r == null) return
             setItems(r.items)
             setTitle(r.name)
             switch (r.color) {
@@ -136,10 +158,12 @@ const List = () => {
     }
 
     const doneItemsComponents = items ? Object.entries(items).map(([key, item]) => {
-        if (item.done) return <Card colorF={colorF} done={item.done} text={item.text} key={key} id={key} list={id} update={fetchList}/>
+        if (item.done) return <Card colorF={colorF} done={item.done} text={item.text} key={key} id={key} list={id}
+                                    update={fetchList}/>
     }) : null
     const activeItemsComponents = items ? Object.entries(items).map(([key, item]) => {
-        if (!item.done) return <Card colorF={colorF} done={item.done} text={item.text} key={key} id={key} list={id} update={fetchList}/>
+        if (!item.done) return <Card colorF={colorF} done={item.done} text={item.text} key={key} id={key} list={id}
+                                     update={fetchList}/>
     }) : null
 
     return <div className={`${styles.background} ${colorB}`}>
