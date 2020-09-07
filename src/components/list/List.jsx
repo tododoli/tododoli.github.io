@@ -35,7 +35,7 @@ const Header = (props) => {
                     <input autoFocus={true} onSubmit={rename} placeholder={'New title...'} onChange={(e) => {setNewTitle(e.target.value)}}
                            value={newTitle}/>
                            :
-                    <div className={styles.title}><NavLink className={styles.link} to={'/'}>{'tododoli/'}</NavLink>{<span>{props.title}</span> || ''}</div>
+                    <div className={styles.title}><NavLink className={styles.link+' '+props.color} to={'/'}>{'ToDoDoLi:'}</NavLink>{<span>{props.title}</span> || ''}</div>
                 }
             </div>
             <div className={styles.titleButton}>
@@ -45,7 +45,7 @@ const Header = (props) => {
             </div>
         </div>
         <div className={styles.copySection}>
-            <CopyToClipboard text={window.location.href} onCopy={() => setCopied(true)}>
+            <CopyToClipboard text={props.link} onCopy={() => setCopied(true)}>
                 <div className={styles.copyLink}>
                     <i className={isCopied ? 'fas fa-check' : 'fas fa-link'}/>
                 </div>
@@ -61,6 +61,7 @@ const NewCard = (props) => {
     }
 
     const onAdd = () => {
+        if (cardText === '') return
         props.addTask(cardText)
         setCardText('')
         document.querySelector('#input').focus()
@@ -74,9 +75,9 @@ const NewCard = (props) => {
     }
 
     return <div className={styles.inputWrapper} id={'addCard'}>
-        <input id={'input'} placeholder='New task...' className={styles.input} value={cardText}
+        <TextArea id={'input'} maxRows={5}  placeholder='New task...' className={styles.input} value={cardText}
                   onChange={updateInput} onKeyPress={listenKey}/>
-        <div className={styles.addButton+' '+props.color} onClick={onAdd}><i className='fas fa-plus-circle'/></div>
+        <div className={styles.addButton+' '+props.color} style={cardText !=='' ? {opacity: 1} : {opacity: .6}} onClick={onAdd}><i className='fas fa-plus-circle'/></div>
     </div>
 }
 
@@ -86,6 +87,13 @@ const List = () => {
     let [title, setTitle] = useState('')
     let [colorF, setColorF] = useState(colors.default) // Yeah I know how weird it is
     let [colorB, setColorB] = useState(colors.defaultB)
+    let [link, setLink] = useState('')
+
+    useEffect(
+        ()=>{
+            setLink(window.location.href)
+        }, []
+    )
 
     useEffect(
         () => {
@@ -136,7 +144,7 @@ const List = () => {
     }) : null
 
     return <div className={`${styles.background} ${colorB}`}>
-        <Header title={title} listId={id} update={fetchList}/>
+        <Header title={title} listId={id} update={fetchList} link={link} color={colorF}/>
         <div className={styles.list}>
             {doneItemsComponents}
             {activeItemsComponents}

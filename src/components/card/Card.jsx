@@ -58,7 +58,7 @@ const Card = (props) => {
                 <i className='fas fa-check-circle' onClick={markTask}/>}</div>
             <div
                 className={props.done ? styles.textDone : styles.textActive}>{editMode ?
-                <input onKeyPress={listenKey} onBlur={()=>setEditMode(false)} className={styles.input} autoFocus={true} value={newText}
+                <TextArea maxRows={5} onKeyPress={listenKey} onBlur={()=>setEditMode(false)} className={styles.input} autoFocus={true} value={newText}
                        onChange={(e) => {
                            setNewText(e.target.value)}}/> : props.text}</div>
             <div className={styles.btn + ' ' + props.colorF}><i
