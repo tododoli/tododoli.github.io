@@ -75,7 +75,7 @@ const Card = (props) => {
                            }}/>
                     :
                     <Linkify componentDecorator={(decoratedHref, decoratedText, key) => (
-                        <a target="blank" href={decoratedHref} key={key}>
+                        <a target="blank" href={decoratedHref} key={key} style={{color: "black"}}>
                             {'Link'}
                         </a>
                     )}>
