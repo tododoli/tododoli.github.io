@@ -40,7 +40,7 @@ const Header = (props) => {
     }
 
     const rename = () => {
-        API.renameList(props.listId, newTitle === '' ? props.title : newTitle).then(r => {
+        API.renameList(props.listId, newTitle === '' ? props.title : newTitle).then(() => {
             setEditMode(false)
             props.update(props.listId)
         })
@@ -105,7 +105,7 @@ const NewCard = (props) => {
     }
 
     return <div className={styles.inputWrapper} id={'addCard'}>
-        <input id={'input'} placeholder='New task...' className={styles.input} value={cardText}
+        <input autoComplete="off" id={'input'} placeholder='New task...' className={styles.input} value={cardText}
                onChange={updateInput} onKeyPress={listenKey}/>
         <div className={styles.addButton + ' ' + props.color} style={cardText !== '' ? {opacity: 1} : {opacity: .6}}
              onClick={onAdd}><i className='fas fa-plus-circle'/></div>

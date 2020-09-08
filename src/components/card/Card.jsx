@@ -1,7 +1,7 @@
-import React, {useEffect, useState} from 'react'
+import React, {useState} from 'react'
 import styles from './Card.module.css'
 import {API} from "../../API/API";
-
+import Linkify from "react-linkify"
 
 const Options = (props) => {
     return <div className={styles.options}>
@@ -31,14 +31,14 @@ const Card = (props) => {
     }
     const markTask = () => {
         API.editTask(props.list, props.id, {text: props.text, done: !props.done}).then(
-            (r) => {
+            () => {
                 props.update(props.list)
             }
         )
     }
     const deleteTask = () => {
         API.deleteTask(props.list, props.id).then(
-            r => {
+            () => {
                 props.update(props.list)
             }
         )
@@ -53,7 +53,7 @@ const Card = (props) => {
 
     const saveTask = () => {
         API.editTask(props.list, props.id, {text: newText, done: props.done}).then(
-            (r) => {
+            () => {
                 setEditMode(false)
                 props.update(props.list)
             }
@@ -65,12 +65,23 @@ const Card = (props) => {
                 <i className='far fa-circle' onClick={markTask}/> :
                 <i className='fas fa-check-circle' onClick={markTask}/>}</div>
             <div
-                className={props.done ? styles.textDone : styles.textActive}>{editMode ?
-                <input onKeyPress={listenKey}  className={styles.input}
-                       autoFocus={true} value={newText}
-                       onChange={(e) => {
-                           setNewText(e.target.value)
-                       }}/> : props.text}</div>
+                className={props.done ? styles.textDone : styles.textActive}>{
+                editMode
+                    ?
+                    <input onKeyPress={listenKey} className={styles.input}
+                           autoFocus={true} value={newText}
+                           onChange={(e) => {
+                               setNewText(e.target.value)
+                           }}/>
+                    :
+                    <Linkify componentDecorator={(decoratedHref, decoratedText, key) => (
+                        <a target="blank" href={decoratedHref} key={key}>
+                            {decoratedText}
+                        </a>
+                    )}>
+                        <span>{props.text}</span>
+                    </Linkify>}
+            </div>
             <div className={styles.btn + ' ' + props.colorF}><i
                 id={styles.menuBtn}
                 className={isOptsShown ? 'fas fa-ellipsis-h' : 'fas fa-ellipsis-h'}
