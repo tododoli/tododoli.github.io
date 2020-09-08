@@ -24,7 +24,17 @@ export const API = {
     },
     renameList: (listId, newName) => {
         return instance.patch(`storage/${listId}.json`, {name: newName}).then(r=>r.data)
+    },
+    createUser: () => {
+        return instance.post(`pins.json`, {pins: {}}).then(r=>r.data)
+    },
+    fetchPins: (userId) => {
+        return instance.get(`pins/${userId}.json`).then(r=>r.data)
+    },
+    setPins: (userId, pins) => {
+        return instance.patch(`pins/${userId}.json`, {pins: pins}).then(r=>r.data)
     }
+
 }
 window.API = API;
 

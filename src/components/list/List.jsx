@@ -5,12 +5,14 @@ import {NavLink, useParams} from 'react-router-dom'
 import {API} from "../../API/API";
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import colors from './../../Colors.module.css'
+import QR from "../QR";
 
 const Header = (props) => {
     let [isCopied, setCopied] = useState(false)
     let [editMode, setEditMode] = useState(false)
     let [newTitle, setNewTitle] = useState(props.title)
     let [isPinned, setPinned] = useState(false)
+    let [isQRShown, showQR] = useState(false)
 
     useEffect(
         () => {
@@ -22,6 +24,8 @@ const Header = (props) => {
 
     const pinList = (add) => {
         let pins = JSON.parse(localStorage.getItem('pins'))
+        let key = localStorage.getItem('syncKey')
+
         if (pins === null) pins = []
 
         if (pins.includes(props.listId)) {
@@ -36,6 +40,7 @@ const Header = (props) => {
             setPinned(false)
 
         localStorage.setItem('pins', JSON.stringify(pins))
+        key !==null && API.setPins(key, pins)
         props.update(props.listId)
     }
 
@@ -80,6 +85,12 @@ const Header = (props) => {
                     <i className={isCopied ? 'fas fa-check' : 'fas fa-link'}/>
                 </div>
             </CopyToClipboard>
+        </div>
+        <div className={styles.copySection}>
+            <div className={styles.copyLink} onClick={()=>showQR(true)}>
+                <i className={'fas fa-qrcode'}/>
+            </div>
+            {isQRShown && <QR link={props.link} hideFun={()=>showQR(false)}/>}
         </div>
     </div>
 }
@@ -191,7 +202,7 @@ const List = () => {
         API.addTask(id, text).then(
             (resp) => {
                 resp.name && fetchList(id)
-                document.querySelector('#addCard').scrollIntoView({behavior: "auto"})
+                document.querySelector('#addCard').scrollIntoView()
             }
         )
     }

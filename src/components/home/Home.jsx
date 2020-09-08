@@ -3,6 +3,8 @@ import styles from './Home.module.css'
 import colors from '../../Colors.module.css'
 import {NavLink, Redirect} from "react-router-dom";
 import {API} from "../../API/API";
+import {CopyToClipboard} from "react-copy-to-clipboard/lib/Component";
+import QR from "../QR";
 
 
 const Home = () => {
@@ -28,6 +30,7 @@ const Home = () => {
     if (link !== '') return <Redirect to={link}/>
     return <div className={styles.wrapper}>
         <div>
+            <SyncParams/>
             <div className={styles.form}>
                 <div className={styles.input}>
                     <input onKeyPress={listenKey} placeholder={'New List...'} value={title}
@@ -65,9 +68,27 @@ const History = (props) => {
         }, []
     )
     const getPins = () => {
-        let pins = localStorage.getItem('pins')
-        if (pins != null)
-            setPins(JSON.parse(pins))
+        let key = localStorage.getItem('syncKey')
+        if (key!=null)
+        {
+            API.fetchPins(key).then(
+                r=>{
+                    if(r != null) {
+                        setPins(r.pins)
+                        localStorage.setItem('pins', JSON.stringify(r.pins))
+                    }
+                    else {
+                        setPins([])
+                        localStorage.setItem('pins', JSON.stringify([]))
+                    }
+                }
+            )
+        }
+        else {
+            let pins = localStorage.getItem('pins')
+            if (pins != null)
+                setPins(JSON.parse(pins))
+        }
     }
 
     const getHistory = () => {
@@ -129,13 +150,79 @@ const ListCard = (props) => {
 
     return <NavLink to={`/${props.id}`}
                     style={{textDecoration: "none", color: "black"}}>
-        <div className={styles.itemWrapper} style={listProps.name ? {opacity: 1}:{opacity: 0}}>
+        <div className={styles.itemWrapper} style={listProps.name ? {opacity: 1} : {opacity: 0}}>
             <div className={styles.circle + ' ' + listProps.color}>
-                {listProps.color && <i className={props.pin ? 'fas fa-star': 'fas fa-circle'}/>}
+                {listProps.color && <i className={props.pin ? 'fas fa-star' : 'fas fa-circle'}/>}
             </div>
             <div className={styles.listName}>{listProps.name || ''}</div>
         </div>
     </NavLink>
+}
+
+const SyncParams = () => {
+    let [isSynced, setSynced] = useState(false)
+    let [syncKey, setSyncKey] = useState(null)
+    let [link, setLink] = useState('')
+    let [isCopied, setCopied] = useState(false)
+    let [isQRShown, showQR] = useState(false)
+    let [isHintShown, showHint] = useState(false)
+
+    useEffect(() => {
+        checkSync()
+    }, [isSynced])
+
+    const checkSync = () => {
+        let storedKey = localStorage.getItem('syncKey')
+        setSynced(storedKey != null)
+        setSyncKey(storedKey)
+        setLink(generateLink)
+    }
+
+    const generateLink = () => {
+        return window.location.href + 'sync/' + syncKey
+    }
+    const createUser = () => {
+        API.createUser().then(
+            r => {
+                if (r != null) {
+                    let localPins = JSON.parse(localStorage.getItem('pins'))
+                    API.setPins(r.name, localPins).then(()=>{
+                        setSyncKey(r.name)
+                        setSynced(true)
+                        setLink(generateLink())
+                        localStorage.setItem('syncKey', r.name)
+                    })
+                }
+            }
+        )
+    }
+
+    return <div className={styles.syncWrapper} style={isHintShown || isQRShown ? {}:{opacity: .6}}>
+        {
+            isSynced ?
+                <div className={styles.isSynced}>
+                    {isHintShown && <div className={styles.hint}>Your pinned lists are cloud stored. You can sync a new device using the link below. <NavLink style={{color: 'black'}} to={'/nosync'}>Disable sync</NavLink></div>}
+                    <div className={styles.syncedOptions}>
+                        <CopyToClipboard text={link} onCopy={()=>setCopied(true)}><div className={styles.btn}><i className={isCopied ? 'fas fa-check': 'fas fa-link'}/>{isCopied ? 'Copied': 'Copy link'}</div></CopyToClipboard>
+                        <div className={styles.btn} onClick={()=>showQR(true)}><i className={'fas fa-qrcode'}/>QR</div>
+                        {isQRShown && <QR link={link} hideFun={()=>showQR(false)}/>}
+                        <div className={styles.btn} onClick={()=>showHint(!isHintShown)}><i className={isHintShown ? 'fas fa-chevron-up' :'fas fa-chevron-down'}/>Hint</div>
+                    </div>
+                </div>
+
+
+                :
+                <div className={styles.isSynced}>
+                    {isHintShown && <div className={styles.hint}>This devise shows your local pins. Start with creating a Cloud for pins. You'll be able to sync your connected devices</div>}
+                    <div className={styles.localOptions}>
+
+                        <div className={styles.btn} onClick={createUser}><i className={'fas fa-cloud'}/>New Cloud</div>
+
+                        <div className={styles.btn} onClick={()=>showHint(!isHintShown)}><i className={isHintShown ? 'fas fa-chevron-up' :'fas fa-chevron-down'}/>Hint</div>
+                    </div>
+                </div>
+        }
+    </div>
 }
 
 export default Home

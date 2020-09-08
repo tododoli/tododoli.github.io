@@ -26,8 +26,7 @@
 
     width: 100vw;
     display: grid;
-    grid-template-columns: 1fr min-content;
-    grid-gap: 1rem;
+    grid-template-columns: 1fr min-content min-content;
     padding: .5rem 0;
     overflow: hidden;
     border-radius: 0 0 5px 5px;
@@ -86,7 +85,7 @@
 }
 .titleButton:active {
     transform: scale(.9);
-    transition-duration: 0;
+    transition-duration: 0s;
 }
 
 

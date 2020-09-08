@@ -1,0 +1,18 @@
+.wrapper {
+    position: absolute;
+    top:0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0,0,0,.6);
+    backdrop-filter: blur(10px);
+    z-index: 100;
+}
+.wrapper canvas {
+    background-color: white;
+    padding: 1rem;
+    border-radius: 10px;
+}
