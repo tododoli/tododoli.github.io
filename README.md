@@ -9,14 +9,14 @@ For me the app is just a project to learn and practice using React JS.
 For you it might be a fast and simple tool to create, manage and share different kind of lists.
 ## What can I do with it?
 
-- Create list with specified title and color
-- Rename list
-- Copy link to list in just one tap to share it 
-- Add, edit and delete list items
-- Mark and unmark items as "done"
-- Store links as items
-- Add lists to local pinned 
-- Access local recent lists
+- **Create** list with **specified title and color**
+- **Rename** list
+- **Copy link** to list in just **one tap** to share it 
+- **Add, edit and delete** list items
+- **Mark** and unmark items as **done**
+- Store **links** in items
+- Add lists to local **pinned** 
+- Access local **recent** lists
 
 ## Will it become better?
 I hope it will. I'm planning to add more cool features.
