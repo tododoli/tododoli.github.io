@@ -17,6 +17,8 @@ For you it might be a fast and simple tool to create, manage and share different
 - Store **links** in items
 - Add lists to local **pinned** 
 - Access local **recent** lists
+- **Synchronize** your pinned lists between devices
+- Use **QR Codes** to share links
 
 ## Will it become better?
 I hope it will. I'm planning to add more cool features.
