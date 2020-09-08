@@ -10,12 +10,34 @@ const Header = (props) => {
     let [isCopied, setCopied] = useState(false)
     let [editMode, setEditMode] = useState(false)
     let [newTitle, setNewTitle] = useState(props.title)
+    let [isPinned, setPinned] = useState(false)
 
     useEffect(
         () => {
+            let pins = JSON.parse(localStorage.getItem('pins'))
             setNewTitle(props.title)
-        }, [props.title]
+            setPinned(pins !== null && pins.includes(props.listId))
+        }, [props.listId, isPinned, props.title]
     )
+
+    const pinList = (add) => {
+        let pins = JSON.parse(localStorage.getItem('pins'))
+        if (pins === null) pins = []
+
+        if (pins.includes(props.listId)) {
+            let index = pins.indexOf(props.listId);
+            pins.splice(index, 1);
+        }
+        if (add) {
+            pins.unshift(props.listId) //> 100 && pins.pop() //I'm not sure if I need to limit pins
+            setPinned(true)
+        }
+        else
+            setPinned(false)
+
+        localStorage.setItem('pins', JSON.stringify(pins))
+        props.update(props.listId)
+    }
 
     const rename = () => {
         API.renameList(props.listId, newTitle === '' ? props.title : newTitle).then(r => {
@@ -30,21 +52,27 @@ const Header = (props) => {
             <div className={styles.headerTitle}>
                 {editMode
                     ?
-                    <input autoFocus={true} onSubmit={rename} placeholder={'New title...'} onChange={(e) => {
+                    <input autoFocus={true} placeholder={'New title...'} onChange={(e) => {
                         setNewTitle(e.target.value)
                     }}
                            value={newTitle}/>
                     :
                     <div className={styles.title}><NavLink className={styles.link + ' ' + props.color}
                                                            to={'/'}>{'ToDoDoLi:'}</NavLink>{
-                        <span>{props.title}</span> || ''}</div>
+                        <span onClick={() => setEditMode(true)} style={{cursor: "pointer"}}>{props.title}</span> || ''}
+                    </div>
                 }
             </div>
-            <div className={styles.titleButton}>
+            {editMode && <div className={styles.titleButton}>
                 <i
-                    className={editMode ? 'fas fa-check' : 'fas fa-pen'}
-                    onClick={editMode ? rename : () => setEditMode(true)}/>
-            </div>
+                    className={'fas fa-check'}
+                    onClick={rename}/>
+            </div>}
+            {!editMode && <div className={styles.titleButton} onClick={()=>{pinList(!isPinned); }}>
+                <i
+                    className={isPinned ? 'fas fa-star' : 'far fa-star'}
+                />
+            </div>}
         </div>
         <div className={styles.copySection}>
             <CopyToClipboard text={props.link} onCopy={() => setCopied(true)}>
@@ -96,7 +124,7 @@ const List = () => {
         () => {
             setLink(window.location.href)
             window.scrollTo({top: 0, behavior: "smooth"})
-            updateHistory()
+
         }, []
     )
 
@@ -108,20 +136,31 @@ const List = () => {
 
     const updateHistory = () => {
         let history = JSON.parse(localStorage.getItem('history'))
-        if (history === null)
-            history = []
+        let pins = JSON.parse(localStorage.getItem('pins'))
+        if (pins === null) pins = []
+        if (history === null) history = []
+
         if (history.includes(id)) {
             let index = history.indexOf(id);
             history.splice(index, 1);
-        }
-        history.unshift(id) > 10 && history.pop()
-        localStorage.setItem('history', JSON.stringify(history))
 
+        }
+        if (!pins.includes(id)) history.unshift(id) > 10 && history.pop()
+        else {
+            let index = pins.indexOf(id);
+            pins.splice(index, 1);
+            pins.unshift(id)
+            localStorage.setItem('pins', JSON.stringify(pins))
+        }
+        localStorage.setItem('history', JSON.stringify(history))
 
     }
 
+
     const fetchList = (id) => {
         API.fetchList(id).then(r => {
+            updateHistory()
+
             if (r == null) return
             setItems(r.items)
             setTitle(r.name)

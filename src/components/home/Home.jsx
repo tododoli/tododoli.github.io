@@ -57,11 +57,18 @@ const Home = () => {
 const History = (props) => {
 
     let [items, setItems] = useState([])
+    let [pins, setPins] = useState([])
     useEffect(
         () => {
+            getPins()
             getHistory()
         }, []
     )
+    const getPins = () => {
+        let pins = localStorage.getItem('pins')
+        if (pins != null)
+            setPins(JSON.parse(pins))
+    }
 
     const getHistory = () => {
         let history = localStorage.getItem('history')
@@ -71,11 +78,17 @@ const History = (props) => {
 
     let historyItems = items.map(
         (el) => {
-            return <ListCard id={el} key={el}/>
+            return <ListCard id={el} key={el} pin={false}/>
+        }
+    )
+    let pinnedItems = pins.map(
+        (el) => {
+            return <ListCard id={el} key={el} pin={true}/>
         }
     )
 
     return <div className={styles.history}>
+        {pinnedItems}
         {historyItems}
     </div>
 }
@@ -118,7 +131,7 @@ const ListCard = (props) => {
                     style={{textDecoration: "none", color: "black"}}>
         <div className={styles.itemWrapper} style={listProps.name ? {opacity: 1}:{opacity: 0}}>
             <div className={styles.circle + ' ' + listProps.color}>
-                {listProps.color && <i className={'fas fa-circle'}/>}
+                {listProps.color && <i className={props.pin ? 'fas fa-star': 'fas fa-circle'}/>}
             </div>
             <div className={styles.listName}>{listProps.name || ''}</div>
         </div>
