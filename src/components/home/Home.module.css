@@ -193,7 +193,7 @@
     grid-gap: .5rem;
 }
 .hint {
-    margin-bottom: 1rem;
+    margin-top: 1rem;
 }
 .btn {
     display: grid;

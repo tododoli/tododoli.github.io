@@ -201,25 +201,25 @@ const SyncParams = () => {
         {
             isSynced ?
                 <div className={styles.isSynced}>
-                    {isHintShown && <div className={styles.hint}>Your pinned lists are cloud stored. You can sync a new device using the link below. <NavLink style={{color: 'black'}} to={'/nosync'}>Disable sync</NavLink></div>}
                     <div className={styles.syncedOptions}>
                         <CopyToClipboard text={link} onCopy={()=>setCopied(true)}><div className={styles.btn}><i className={isCopied ? 'fas fa-check': 'fas fa-link'}/>{isCopied ? 'Copied': 'Copy link'}</div></CopyToClipboard>
                         <div className={styles.btn} onClick={()=>showQR(true)}><i className={'fas fa-qrcode'}/>QR</div>
                         {isQRShown && <QR link={link} hideFun={()=>showQR(false)}/>}
                         <div className={styles.btn} onClick={()=>showHint(!isHintShown)}><i className={isHintShown ? 'fas fa-chevron-up' :'fas fa-chevron-down'}/>Hint</div>
                     </div>
+                    {isHintShown && <div className={styles.hint}>Your pinned lists are cloud stored. You can sync a new device using the link below. <NavLink style={{color: 'black'}} to={'/nosync'}>Disable sync</NavLink></div>}
                 </div>
 
 
                 :
                 <div className={styles.isSynced}>
-                    {isHintShown && <div className={styles.hint}>This devise shows your local pins. Start with creating a Cloud for pins. You'll be able to sync your connected devices</div>}
                     <div className={styles.localOptions}>
 
                         <div className={styles.btn} onClick={createUser}><i className={'fas fa-cloud'}/>New Cloud</div>
 
                         <div className={styles.btn} onClick={()=>showHint(!isHintShown)}><i className={isHintShown ? 'fas fa-chevron-up' :'fas fa-chevron-down'}/>Hint</div>
                     </div>
+                    {isHintShown && <div className={styles.hint}>This devise shows your local pins. Start with creating a Cloud for pins. You'll be able to sync your connected devices</div>}
                 </div>
         }
     </div>

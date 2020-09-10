@@ -105,12 +105,11 @@ const NewCard = (props) => {
         if (cardText === '') return
         props.addTask(cardText)
         setCardText('')
-        document.querySelector('#input').focus()
-
     }
     const listenKey = (e) => {
         if (e.key === 'Enter') {
             e.preventDefault()
+            document.activeElement.blur()
             onAdd()
         }
     }
@@ -118,7 +117,7 @@ const NewCard = (props) => {
     return <div className={styles.inputWrapper} id={'addCard'}>
         <input autoComplete="off" id={'input'} placeholder='New task...' className={styles.input} value={cardText}
                onChange={updateInput} onKeyPress={listenKey}/>
-        <div className={styles.addButton + ' ' + props.color} style={cardText !== '' ? {opacity: 1} : {opacity: .6}}
+        <div className={styles.addButton + ' ' + props.color} id={'button'} style={cardText !== '' ? {opacity: 1} : {opacity: .6}}
              onClick={onAdd}><i className='fas fa-plus-circle'/></div>
     </div>
 }
@@ -199,10 +198,11 @@ const List = () => {
         })
     }
     const addTask = (text) => {
+        document.querySelector('#input').focus()
+
         API.addTask(id, text).then(
             (resp) => {
                 resp.name && fetchList(id)
-                document.querySelector('#addCard').scrollIntoView()
             }
         )
     }
