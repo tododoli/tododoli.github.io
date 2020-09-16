@@ -96,6 +96,10 @@ const History = (props) => {
         if (history != null)
             setItems(JSON.parse(history))
     }
+    const clearHistory = () => {
+        localStorage.removeItem('history')
+        setItems([])
+    }
 
     let historyItems = items.map(
         (el) => {
@@ -111,6 +115,11 @@ const History = (props) => {
     return <div className={styles.history}>
         {pinnedItems}
         {historyItems}
+        {items.length !== 0 &&
+        <div className={styles.clearWrapper} onClick={clearHistory}>
+        Clear history
+        </div>
+        }
     </div>
 }
 
