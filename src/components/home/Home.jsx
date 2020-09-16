@@ -61,6 +61,8 @@ const History = (props) => {
 
     let [items, setItems] = useState([])
     let [pins, setPins] = useState([])
+    let [historyLoaded, setHistoryLoaded] = useState(false)
+
     useEffect(
         () => {
             getPins()
@@ -95,6 +97,7 @@ const History = (props) => {
         let history = localStorage.getItem('history')
         if (history != null)
             setItems(JSON.parse(history))
+        setTimeout(()=>{setHistoryLoaded(true)}, 1000)
     }
     const clearHistory = () => {
         localStorage.removeItem('history')
@@ -115,8 +118,8 @@ const History = (props) => {
     return <div className={styles.history}>
         {pinnedItems}
         {historyItems}
-        {items.length !== 0 &&
-        <div className={styles.clearWrapper} onClick={clearHistory}>
+        {historyItems.length !== 0 &&
+        <div className={styles.clearWrapper} onClick={clearHistory} style={historyLoaded ? {opacity: 1} : {opacity: 0}}>
         Clear history
         </div>
         }

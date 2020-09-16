@@ -80,8 +80,11 @@
     max-width: 3rem;
     max-height: 3rem;
     cursor: pointer;
+    transition-duration: .5s;
 }
-
+.color:hover, .colorActive:hover {
+    opacity: .6;
+}
 .colorActive {
     border: solid 3px black;
     box-sizing: border-box;
