@@ -4,8 +4,8 @@ import Card from "../card/Card";
 import {NavLink, useParams} from 'react-router-dom'
 import {API} from "../../API/API";
 import {CopyToClipboard} from 'react-copy-to-clipboard';
-import colors from './../../Colors.module.css'
 import QR from "../QR";
+import {checkColor, getBGStyle, getFGStyle} from "../../utils/Colors";
 
 const Header = (props) => {
     let [isCopied, setCopied] = useState(false)
@@ -35,12 +35,11 @@ const Header = (props) => {
         if (add) {
             pins.unshift(props.listId) //> 100 && pins.pop() //I'm not sure if I need to limit pins
             setPinned(true)
-        }
-        else
+        } else
             setPinned(false)
 
         localStorage.setItem('pins', JSON.stringify(pins))
-        key !==null && API.setPins(key, pins)
+        key !== null && API.setPins(key, pins)
         props.update(props.listId)
     }
 
@@ -62,7 +61,7 @@ const Header = (props) => {
                     }}
                            value={newTitle}/>
                     :
-                    <div className={styles.title}><NavLink className={styles.link + ' ' + props.color}
+                    <div className={styles.title}><NavLink className={styles.link} style={getFGStyle(props.color)}
                                                            to={'/'}>{'ToDoDoLi:'}</NavLink>{
                         <span onClick={() => setEditMode(true)} style={{cursor: "pointer"}}>{props.title}</span> || ''}
                     </div>
@@ -73,7 +72,9 @@ const Header = (props) => {
                     className={'fas fa-check'}
                     onClick={rename}/>
             </div>}
-            {!editMode && <div className={styles.titleButton} onClick={()=>{pinList(!isPinned); }}>
+            {!editMode && <div className={styles.titleButton} onClick={() => {
+                pinList(!isPinned);
+            }}>
                 <i
                     className={isPinned ? 'fas fa-star' : 'far fa-star'}
                 />
@@ -87,10 +88,10 @@ const Header = (props) => {
             </CopyToClipboard>
         </div>
         <div className={styles.copySection}>
-            <div className={styles.copyLink} onClick={()=>showQR(true)}>
+            <div className={styles.copyLink} onClick={() => showQR(true)}>
                 <i className={'fas fa-qrcode'}/>
             </div>
-            {isQRShown && <QR link={props.link} hideFun={()=>showQR(false)}/>}
+            {isQRShown && <QR link={props.link} hideFun={() => showQR(false)}/>}
         </div>
     </div>
 }
@@ -117,7 +118,8 @@ const NewCard = (props) => {
     return <div className={styles.inputWrapper} id={'addCard'}>
         <input autoComplete="off" id={'input'} placeholder='New task...' className={styles.input} value={cardText}
                onChange={updateInput} onKeyPress={listenKey}/>
-        <div className={styles.addButton + ' ' + props.color} id={'button'} style={cardText !== '' ? {opacity: 1} : {opacity: .6}}
+        <div className={styles.addButton} id={'button'}
+             style={cardText !== '' ? {opacity: 1, ...getFGStyle(props.color)} : {opacity: .6, ...getFGStyle(props.color)}}
              onClick={onAdd}><i className='fas fa-plus-circle'/></div>
     </div>
 }
@@ -126,8 +128,9 @@ const List = () => {
     let {id} = useParams()
     let [items, setItems] = useState({})
     let [title, setTitle] = useState('')
-    let [colorF, setColorF] = useState(colors.default) // Yeah I know how weird it is
-    let [colorB, setColorB] = useState(colors.defaultB)
+    // let [colorF, setColorF] = useState(colors.default) // Yeah I know how weird it is
+    //let [colorB, setColorB] = useState(colors.defaultB)
+    let [color, setColor] = useState(checkColor(''))
     let [link, setLink] = useState('')
 
     useEffect(
@@ -174,27 +177,7 @@ const List = () => {
             if (r == null) return
             setItems(r.items)
             setTitle(r.name)
-            switch (r.color) {
-                case 'red':
-                    setColorB(colors.redB)
-                    setColorF(colors.red)
-                    break
-                case 'blue':
-                    setColorB(colors.blueB)
-                    setColorF(colors.blue)
-                    break
-                case 'green':
-                    setColorB(colors.greenB)
-                    setColorF(colors.green)
-                    break
-                case 'dark':
-                    setColorB(colors.darkB)
-                    setColorF(colors.dark)
-                    break
-                default:
-                    setColorB(colors.defaultB)
-                    setColorF(colors.default)
-            }
+            setColor(checkColor(r.color))
         })
     }
     const addTask = (text) => {
@@ -208,20 +191,20 @@ const List = () => {
     }
 
     const doneItemsComponents = items ? Object.entries(items).map(([key, item]) => {
-        if (item.done) return <Card colorF={colorF} done={item.done} text={item.text} key={key} id={key} list={id}
+        if (item.done) return <Card color={color} done={item.done} text={item.text} key={key} id={key} list={id}
                                     update={fetchList}/>
     }) : null
     const activeItemsComponents = items ? Object.entries(items).map(([key, item]) => {
-        if (!item.done) return <Card colorF={colorF} done={item.done} text={item.text} key={key} id={key} list={id}
+        if (!item.done) return <Card color={color} done={item.done} text={item.text} key={key} id={key} list={id}
                                      update={fetchList}/>
     }) : null
 
-    return <div className={`${styles.background} ${colorB}`}>
-        <Header title={title} listId={id} update={fetchList} link={link} color={colorF}/>
+    return <div className={styles.background} style={getBGStyle(color)}>
+        <Header title={title} listId={id} update={fetchList} link={link} color={color}/>
         <div className={styles.list}>
             {doneItemsComponents}
             {activeItemsComponents}
-            <NewCard addTask={addTask} color={colorF}/>
+            <NewCard addTask={addTask} color={color}/>
             <div className={styles.pseudoExtender}/>
         </div>
     </div>

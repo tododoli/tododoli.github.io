@@ -1,15 +1,15 @@
 import React, {useEffect, useState} from 'react'
 import styles from './Home.module.css'
-import colors from '../../Colors.module.css'
 import {NavLink, Redirect} from "react-router-dom";
 import {API} from "../../API/API";
 import {CopyToClipboard} from "react-copy-to-clipboard/lib/Component";
 import QR from "../QR";
+import {checkColor, getFGStyle, palette} from "../../utils/Colors";
 
 
 const Home = () => {
 
-    let [color, setColor] = useState('red')
+    let [color, setColor] = useState(palette[0])
     let [title, setTitle] = useState('')
     let [link, setLink] = useState('')
 
@@ -27,6 +27,13 @@ const Home = () => {
         }
     }
 
+    const colors = palette.map(
+        item => {
+            return <div className={(color === item ? styles.colorActive : styles.color)}
+                        style={{backgroundColor: item}}
+                        onClick={() => setColor(item)}/>
+        }
+    )
     if (link !== '') return <Redirect to={link}/>
     return <div className={styles.wrapper}>
         <div>
@@ -38,14 +45,7 @@ const Home = () => {
                 </div>
                 <div className={styles.colorsSection}>
                     <div className={styles.colors}>
-                        <div className={(color === 'red' ? styles.colorActive : styles.color) + ' ' + colors.redB}
-                             onClick={() => setColor('red')}/>
-                        <div className={(color === 'green' ? styles.colorActive : styles.color) + ' ' + colors.greenB}
-                             onClick={() => setColor('green')}/>
-                        <div className={(color === 'blue' ? styles.colorActive : styles.color) + ' ' + colors.blueB}
-                             onClick={() => setColor('blue')}/>
-                        <div className={(color === 'dark' ? styles.colorActive : styles.color) + ' ' + colors.darkB}
-                             onClick={() => setColor('dark')}/>
+                        {colors}
                     </div>
                 </div>
                 <div className={styles.buttonSection}>
@@ -122,28 +122,14 @@ const ListCard = (props) => {
         getListProps()
     }, [props.id])
 
-    const parseColor = (colorString) => {
-        switch (colorString) {
-            case 'red':
-                return colors.red
-            case 'green':
-                return colors.green
-            case 'dark':
-                return colors.dark
-            case 'blue':
-                return colors.blue
-            default:
-                return colors.default
-        }
-    }
 
     const getListProps = () => {
         API.fetchList(props.id).then(
             (r) => {
                 if (r != null)
-                    setListProps({name: r.name, color: parseColor(r.color)})
+                    setListProps({name: r.name, color: checkColor(r.color)})
                 else
-                    setListProps({name: `It's a bug, lol`, color: colors.default})
+                    setListProps({name: `It's a bug ;)`, color: checkColor('')})
             }
         )
     }
@@ -151,7 +137,7 @@ const ListCard = (props) => {
     return <NavLink to={`/${props.id}`}
                     style={{textDecoration: "none", color: "black"}}>
         <div className={styles.itemWrapper} style={listProps.name ? {opacity: 1} : {opacity: 0}}>
-            <div className={styles.circle + ' ' + listProps.color}>
+            <div className={styles.circle} style={getFGStyle(listProps.color)}>
                 {listProps.color && <i className={props.pin ? 'fas fa-star' : 'fas fa-circle'}/>}
             </div>
             <div className={styles.listName}>{listProps.name || ''}</div>

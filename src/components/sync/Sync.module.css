@@ -65,7 +65,8 @@
 }
 .logo {
     justify-self: center;
-    width: 30%;
+    width: 60%;
+    max-width: 192px;
 }
 .btn {
     justify-self: center;

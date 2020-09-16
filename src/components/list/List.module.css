@@ -65,7 +65,7 @@
 
 .title {
     height: 1.8rem;
-    max-width: 100%;
+    max-width: 95%;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

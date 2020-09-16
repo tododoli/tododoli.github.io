@@ -71,7 +71,7 @@
     width: min-content;
     display: grid;
     grid-gap: .5rem;
-    grid-template-columns: 1fr 1fr 1fr 1fr
+    grid-template-columns: 1fr 1fr 1fr
 }
 
 .color, .colorActive {
@@ -83,7 +83,7 @@
 }
 
 .colorActive {
-    border: solid 2px black;
+    border: solid 3px black;
     box-sizing: border-box;
 }
 
