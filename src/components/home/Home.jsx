@@ -71,22 +71,19 @@ const History = (props) => {
     )
     const getPins = () => {
         let key = localStorage.getItem('syncKey')
-        if (key!=null)
-        {
+        if (key != null) {
             API.fetchPins(key).then(
-                r=>{
-                    if(r != null) {
+                r => {
+                    if (r != null) {
                         setPins(r.pins)
                         localStorage.setItem('pins', JSON.stringify(r.pins))
-                    }
-                    else {
+                    } else {
                         setPins([])
                         localStorage.setItem('pins', JSON.stringify([]))
                     }
                 }
             )
-        }
-        else {
+        } else {
             let pins = localStorage.getItem('pins')
             if (pins != null)
                 setPins(JSON.parse(pins))
@@ -97,7 +94,9 @@ const History = (props) => {
         let history = localStorage.getItem('history')
         if (history != null)
             setItems(JSON.parse(history))
-        setTimeout(()=>{setHistoryLoaded(true)}, 1000)
+        setTimeout(() => {
+            setHistoryLoaded(true)
+        }, 1000)
     }
 
 
@@ -115,9 +114,7 @@ const History = (props) => {
     return <div className={styles.history}>
         {pinnedItems}
         {historyItems}
-        {historyItems.length !== 0 &&
-        <ClearButton setItems={setItems} historyLoaded={historyLoaded}/>
-        }
+        <ClearButton setItems={setItems} historyLoaded={historyLoaded} hasHistory={historyItems.length !== 0}/>
     </div>
 }
 
@@ -179,7 +176,7 @@ const SyncParams = () => {
             r => {
                 if (r != null) {
                     let localPins = JSON.parse(localStorage.getItem('pins'))
-                    API.setPins(r.name, localPins).then(()=>{
+                    API.setPins(r.name, localPins).then(() => {
                         setSyncKey(r.name)
                         setSynced(true)
                         setLink(generateLink())
@@ -190,17 +187,26 @@ const SyncParams = () => {
         )
     }
 
-    return <div className={styles.syncWrapper} style={isHintShown || isQRShown ? {}:{opacity: .6}}>
+    return <div className={styles.syncWrapper} style={isHintShown || isQRShown ? {} : {opacity: .6}}>
         {
             isSynced ?
                 <div className={styles.isSynced}>
                     <div className={styles.syncedOptions}>
-                        <CopyToClipboard text={link} onCopy={()=>setCopied(true)}><div className={styles.btn}><i className={isCopied ? 'fas fa-check': 'fas fa-link'}/>{isCopied ? 'Copied': 'Link'}</div></CopyToClipboard>
-                        <div className={styles.btn} onClick={()=>showQR(true)}><i className={'fas fa-qrcode'}/>QR</div>
-                        {isQRShown && <QR link={link} hideFun={()=>showQR(false)}/>}
-                        <div className={styles.btn} onClick={()=>showHint(!isHintShown)}><i className={isHintShown ? 'fas fa-chevron-up' :'fas fa-chevron-down'}/>Hint</div>
+                        <CopyToClipboard text={link} onCopy={() => setCopied(true)}>
+                            <div className={styles.btn}><i
+                                className={isCopied ? 'fas fa-check' : 'fas fa-link'}/>{isCopied ? 'Copied' : 'Link'}
+                            </div>
+                        </CopyToClipboard>
+                        <div className={styles.btn} onClick={() => showQR(true)}><i className={'fas fa-qrcode'}/>QR
+                        </div>
+                        {isQRShown && <QR link={link} hideFun={() => showQR(false)}/>}
+                        <div className={styles.btn} onClick={() => showHint(!isHintShown)}><i
+                            className={isHintShown ? 'fas fa-chevron-up' : 'fas fa-chevron-down'}/>Hint
+                        </div>
                     </div>
-                    {isHintShown && <div className={styles.hint}>Your pinned lists are cloud stored. You can sync a new device using the link below. <NavLink style={{color: 'black'}} to={'/nosync'}>Disable sync</NavLink></div>}
+                    {isHintShown &&
+                    <div className={styles.hint}>Your pinned lists are cloud stored. You can sync a new device using the
+                        link below. <NavLink style={{color: 'black'}} to={'/nosync'}>Disable sync</NavLink></div>}
                 </div>
 
 
@@ -210,24 +216,55 @@ const SyncParams = () => {
 
                         <div className={styles.btn} onClick={createUser}><i className={'fas fa-cloud'}/>New Cloud</div>
 
-                        <div className={styles.btn} onClick={()=>showHint(!isHintShown)}><i className={isHintShown ? 'fas fa-chevron-up' :'fas fa-chevron-down'}/>Hint</div>
+                        <div className={styles.btn} onClick={() => showHint(!isHintShown)}><i
+                            className={isHintShown ? 'fas fa-chevron-up' : 'fas fa-chevron-down'}/>Hint
+                        </div>
                     </div>
-                    {isHintShown && <div className={styles.hint}>This devise shows your local pins. Start with creating a Cloud for pins. You'll be able to sync your connected devices</div>}
+                    {isHintShown &&
+                    <div className={styles.hint}>This devise shows your local pins. Start with creating a Cloud for
+                        pins. You'll be able to sync your connected devices</div>}
                 </div>
         }
     </div>
 }
 
 const ClearButton = (props) => {
-    let [touched, setTouched] = useState(false)
+    let [cleared, setCleared] = useState(false)
+    let [temp, setTemp] = useState([])
+    let [opacity, setOpacity] = useState(1)
 
-    const clearHistory = () => {
-        localStorage.removeItem('history')
-        props.setItems([])
+    const saveHistory = () => {
+        let history = JSON.parse(localStorage.getItem('history'))
+        setTemp(history)
     }
 
-    return <div className={styles.clearWrapper} onBlur={()=>{setTouched(false)}} onClick={touched ? clearHistory : ()=>{setTouched(true)}} style={props.historyLoaded ? {opacity: 1} : {opacity: 0}}>
-        {touched ? 'Sure?' : 'Clear history'}
+    const restoreHistory = () => {
+        localStorage.setItem('history', JSON.stringify(temp))
+        props.setItems(temp)
+        setCleared(false)
+    }
+
+    const clearHistory = () => {
+        saveHistory()
+        setCleared(true)
+        localStorage.removeItem('history')
+        props.setItems([])
+        setTimeout(() => {
+            setOpacity(.5)
+            setTimeout(() => {
+                setOpacity(0)
+                setTimeout(() => setCleared(false), 500)
+            }, 2000)
+        }, 2000)
+
+    }
+    if (!props.hasHistory && !cleared) return null
+
+    return <div className={styles.clearWrapper}
+                onClick={cleared ? restoreHistory : clearHistory}
+                style={props.historyLoaded ? {opacity: opacity} : {opacity: 0}}>
+
+        {cleared ? 'Undo' : 'Clear history'}
     </div>
 }
 
