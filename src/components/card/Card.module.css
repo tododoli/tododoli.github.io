@@ -9,6 +9,7 @@
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
+    user-select: none;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     word-break: break-word;
@@ -47,12 +48,12 @@
 }
 
 .done {
-    background-color: white;
+    background-color: #fdfffc;
     opacity: .7;
 }
 
 .active {
-    background-color: white;
+    background-color: #fdfffc;
     color: black;
 }
 

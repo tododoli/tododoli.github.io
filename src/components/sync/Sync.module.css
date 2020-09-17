@@ -8,7 +8,7 @@
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
 
-    background: linear-gradient(220deg, rgba(244, 162, 97, 0.6), rgba(231, 111, 81, 0.6), rgba(42, 157, 143, 0.6), rgba(38, 70, 83, 0.6));
+    background: linear-gradient(220deg, rgba(244, 162, 97, 0.8), rgba(231, 111, 81, 0.8), rgba(42, 157, 143, 0.8), rgba(38, 70, 83, 0.8));
     background-size: 800% 800%;
     -webkit-animation: AnimationName 40s ease infinite;
     -moz-animation: AnimationName 40s ease infinite;
@@ -55,7 +55,7 @@
 
 .form {
     padding: 1rem;
-    background-color: white;
+    background-color: #fdfffc;
     width: 80vw;
     max-width: 400px;
     display: grid;
@@ -71,6 +71,7 @@
 .btn {
     justify-self: center;
     display: grid;
+    user-select: none;
     grid-template-columns: min-content 1fr;
     grid-gap: .5rem;
     padding: 0.5rem;

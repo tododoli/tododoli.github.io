@@ -99,10 +99,7 @@ const History = (props) => {
             setItems(JSON.parse(history))
         setTimeout(()=>{setHistoryLoaded(true)}, 1000)
     }
-    const clearHistory = () => {
-        localStorage.removeItem('history')
-        setItems([])
-    }
+
 
     let historyItems = items.map(
         (el) => {
@@ -119,9 +116,7 @@ const History = (props) => {
         {pinnedItems}
         {historyItems}
         {historyItems.length !== 0 &&
-        <div className={styles.clearWrapper} onClick={clearHistory} style={historyLoaded ? {opacity: 1} : {opacity: 0}}>
-        Clear history
-        </div>
+        <ClearButton setItems={setItems} historyLoaded={historyLoaded}/>
         }
     </div>
 }
@@ -200,7 +195,7 @@ const SyncParams = () => {
             isSynced ?
                 <div className={styles.isSynced}>
                     <div className={styles.syncedOptions}>
-                        <CopyToClipboard text={link} onCopy={()=>setCopied(true)}><div className={styles.btn}><i className={isCopied ? 'fas fa-check': 'fas fa-link'}/>{isCopied ? 'Copied': 'Copy link'}</div></CopyToClipboard>
+                        <CopyToClipboard text={link} onCopy={()=>setCopied(true)}><div className={styles.btn}><i className={isCopied ? 'fas fa-check': 'fas fa-link'}/>{isCopied ? 'Copied': 'Link'}</div></CopyToClipboard>
                         <div className={styles.btn} onClick={()=>showQR(true)}><i className={'fas fa-qrcode'}/>QR</div>
                         {isQRShown && <QR link={link} hideFun={()=>showQR(false)}/>}
                         <div className={styles.btn} onClick={()=>showHint(!isHintShown)}><i className={isHintShown ? 'fas fa-chevron-up' :'fas fa-chevron-down'}/>Hint</div>
@@ -220,6 +215,19 @@ const SyncParams = () => {
                     {isHintShown && <div className={styles.hint}>This devise shows your local pins. Start with creating a Cloud for pins. You'll be able to sync your connected devices</div>}
                 </div>
         }
+    </div>
+}
+
+const ClearButton = (props) => {
+    let [touched, setTouched] = useState(false)
+
+    const clearHistory = () => {
+        localStorage.removeItem('history')
+        props.setItems([])
+    }
+
+    return <div className={styles.clearWrapper} onBlur={()=>{setTouched(false)}} onClick={touched ? clearHistory : ()=>{setTouched(true)}} style={props.historyLoaded ? {opacity: 1} : {opacity: 0}}>
+        {touched ? 'Sure?' : 'Clear history'}
     </div>
 }
 
