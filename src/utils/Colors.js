@@ -26,13 +26,13 @@ const getRGB = (color) => {
     ] : [236, 236, 236]
 }
 
-export const getFGStyle = (color) => {
+export const setForeColor = (color) => {
     return {
         color: checkColor(color),
         borderColor: checkColor(color)
     }
 }
-export const getBGStyle = (color) => {
+export const setBackColor = (color) => {
     let rgb = getRGB(color)
     return {
         backgroundColor: `rgba(${rgb[0]},${rgb[1]},${rgb[2]},.7)`

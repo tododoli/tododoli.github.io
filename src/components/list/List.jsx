@@ -5,7 +5,7 @@ import {NavLink, useParams} from 'react-router-dom'
 import {API} from "../../API/API";
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import QR from "../QR";
-import {checkColor, getBGStyle, getFGStyle} from "../../utils/Colors";
+import {checkColor, setBackColor, setForeColor} from "../../utils/Colors";
 
 const Header = (props) => {
     let [isCopied, setCopied] = useState(false)
@@ -61,7 +61,7 @@ const Header = (props) => {
                     }}
                            value={newTitle}/>
                     :
-                    <div className={styles.title}><NavLink className={styles.link} style={getFGStyle(props.color)}
+                    <div className={styles.title}><NavLink className={styles.link} style={setForeColor(props.color)}
                                                            to={'/'}>{'ToDoDoLi:'}</NavLink>{
                         <span onClick={() => setEditMode(true)} style={{cursor: "pointer"}}>{props.title}</span> || ''}
                     </div>
@@ -119,8 +119,23 @@ const NewCard = (props) => {
         <input autoComplete="off" id={'input'} placeholder='New task...' className={styles.input} value={cardText}
                onChange={updateInput} onKeyPress={listenKey}/>
         <div className={styles.addButton} id={'button'}
-             style={cardText !== '' ? {opacity: 1, ...getFGStyle(props.color)} : {opacity: .6, ...getFGStyle(props.color)}}
+             style={cardText !== '' ? {opacity: 1, ...setForeColor(props.color)} : {opacity: .6, ...setForeColor(props.color)}}
              onClick={onAdd}><i className='fas fa-plus-circle'/></div>
+    </div>
+}
+
+const HiddenItems = (props) => {
+
+    return <div
+        style={{display: 'flex', justifyContent: 'center', ...setForeColor(props.color)}}
+    >
+        <div className={styles.hiddenWrapper}
+             onClick={props.hidden ? props.expandDone : props.hideDone}>
+            <div className={styles.ic} style={setForeColor(props.color)}>
+                <i className={props.hidden ? 'fas fa-chevron-down' : 'fas fa-chevron-up'}/>
+            </div>
+            <div className={styles.label}>{!props.hidden ? 'Hide checked' : `${props.hiddenCount} item${props.hiddenCount === 1 ? '' : 's'} done`}</div>
+        </div>
     </div>
 }
 
@@ -128,10 +143,9 @@ const List = () => {
     let {id} = useParams()
     let [items, setItems] = useState({})
     let [title, setTitle] = useState('')
-    // let [colorF, setColorF] = useState(colors.default) // Yeah I know how weird it is
-    //let [colorB, setColorB] = useState(colors.defaultB)
     let [color, setColor] = useState(checkColor(''))
     let [link, setLink] = useState('')
+    let [isHidden, setHidden] = useState(true)
 
     useEffect(
         () => {
@@ -189,20 +203,29 @@ const List = () => {
             }
         )
     }
-
+    let doneCount = 0;
     const doneItemsComponents = items ? Object.entries(items).map(([key, item]) => {
-        if (item.done) return <Card color={color} done={item.done} text={item.text} key={key} id={key} list={id}
-                                    update={fetchList}/>
+        if (item.done) {
+            doneCount++
+            return <Card color={color} done={item.done} text={item.text} key={key} id={key} list={id}
+                         update={fetchList}/>
+        }
     }) : null
     const activeItemsComponents = items ? Object.entries(items).map(([key, item]) => {
         if (!item.done) return <Card color={color} done={item.done} text={item.text} key={key} id={key} list={id}
                                      update={fetchList}/>
     }) : null
 
-    return <div className={styles.background} style={getBGStyle(color)}>
+
+    return <div className={styles.background} style={setBackColor(color)}>
         <Header title={title} listId={id} update={fetchList} link={link} color={color}/>
         <div className={styles.list}>
-            {doneItemsComponents}
+            {doneCount === 0 || <HiddenItems expandDone={() => setHidden(false)}
+                                             hidden={isHidden}
+                                             hideDone={() => setHidden(true)}
+                                             hiddenCount={doneCount}
+                                             color={color}/>}
+            {isHidden || doneItemsComponents}
             {activeItemsComponents}
             <NewCard addTask={addTask} color={color}/>
             <div className={styles.pseudoExtender}/>

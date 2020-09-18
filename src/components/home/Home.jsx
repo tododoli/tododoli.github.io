@@ -4,7 +4,7 @@ import {NavLink, Redirect} from "react-router-dom";
 import {API} from "../../API/API";
 import {CopyToClipboard} from "react-copy-to-clipboard/lib/Component";
 import QR from "../QR";
-import {checkColor, getFGStyle, palette} from "../../utils/Colors";
+import {checkColor, setForeColor, palette} from "../../utils/Colors";
 
 
 const Home = () => {
@@ -141,7 +141,7 @@ const ListCard = (props) => {
     return <NavLink to={`/${props.id}`}
                     style={{textDecoration: "none", color: "black"}}>
         <div className={styles.itemWrapper} style={listProps.name ? {opacity: 1} : {opacity: 0}}>
-            <div className={styles.circle} style={getFGStyle(listProps.color)}>
+            <div className={styles.circle} style={setForeColor(listProps.color)}>
                 {listProps.color && <i className={props.pin ? 'fas fa-star' : 'fas fa-circle'}/>}
             </div>
             <div className={styles.listName}>{listProps.name || ''}</div>
