@@ -232,6 +232,7 @@ const ClearButton = (props) => {
     let [cleared, setCleared] = useState(false)
     let [temp, setTemp] = useState([])
     let [opacity, setOpacity] = useState(1)
+    let [currentTimer, setCurrentTimer] = useState(0)
 
     const saveHistory = () => {
         let history = JSON.parse(localStorage.getItem('history'))
@@ -239,9 +240,11 @@ const ClearButton = (props) => {
     }
 
     const restoreHistory = () => {
+        clearTimeout(currentTimer)
         localStorage.setItem('history', JSON.stringify(temp))
         props.setItems(temp)
         setCleared(false)
+        setOpacity(1)
     }
 
     const clearHistory = () => {
@@ -249,13 +252,14 @@ const ClearButton = (props) => {
         setCleared(true)
         localStorage.removeItem('history')
         props.setItems([])
-        setTimeout(() => {
+        setCurrentTimer(setTimeout(() => {
             setOpacity(.5)
-            setTimeout(() => {
+            setCurrentTimer(setTimeout(() => {
                 setOpacity(0)
-                setTimeout(() => setCleared(false), 500)
-            }, 2000)
-        }, 2000)
+                setCurrentTimer(setTimeout(() => setCleared(false),
+                    500))
+            }, 3500))
+        }, 2000))
 
     }
     if (!props.hasHistory && !cleared) return null
