@@ -136,14 +136,14 @@
 }
 
 .hiddenWrapper {
-    background-color: #fdfffc;
+    background-color: rgba(255,255,255,.9);
     padding: .5rem;
     height: fit-content;
     border-radius: .5rem;
    /* width: 80vw;
     max-width: 400px;
     min-width: 200px;*/
-    width: fit-content;
+    width: 100%;
     justify-self: center;
     cursor: pointer;
     transition-duration: .5s;

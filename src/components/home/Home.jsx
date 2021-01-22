@@ -206,7 +206,7 @@ const SyncParams = () => {
                     </div>
                     {isHintShown &&
                     <div className={styles.hint}>Your pinned lists are cloud stored. You can sync a new device using the
-                        link below. <NavLink style={{color: 'black'}} to={'/nosync'}>Disable sync</NavLink></div>}
+                        link above. <NavLink style={{color: 'black'}} to={'/nosync'}>Disable sync</NavLink></div>}
                 </div>
 
 
